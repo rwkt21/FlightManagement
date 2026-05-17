@@ -34,6 +34,13 @@ class DBOperations:
                                 departure_date       DATE NOT NULL,
                                 departure_time       TIME,
                                 updated_departure_time TIME,
+                                arrival_time         TIME,
+                                status               TEXT,
+                                pilot_id             INTEGER,
+                                airport_code         TEXT,
+                                PRIMARY KEY (flight_number + departure_date),
+                                FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
+                                FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
                                 
                                 
     
