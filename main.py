@@ -27,5 +27,8 @@ class DBOperations:
                                 airport_name TEXT NOT NULL,
                                 city         TEXT NOT NULL,
                                 country      TEXT NOT NULL)"""
+
+    sql_create_flight_table = """CREATE TABLE IF NOT EXISTS FLIGHT (
+                                
     
                                 
