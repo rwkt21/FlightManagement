@@ -5,6 +5,11 @@ import sqlite3
 # Manages flights, pilots and destinations for an airline company
 # This uses SQLite3 for database operations via a command-line interface
 
+#step 1 - creates the tables
+#step 2 - adds sample data to the tables
+#step 3 - provides functions to add, update, delete and query the data
+
+
 
 
 class DBOperations:
