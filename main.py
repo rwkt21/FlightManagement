@@ -41,6 +41,11 @@ class DBOperations:
                                 PRIMARY KEY (flight_number + departure_date),
                                 FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
                                 FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
+
+    sql_insert_pilot = ""
+    sql_insert_flight = ""
+    sql_insert_destination = ""
+    sql_select_all_flights = "SELECT * FROM FLIGHT"
                                 
                                 
     
