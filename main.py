@@ -25,4 +25,7 @@ class DBOperations:
     sql_create_destination_table = """CREATE TABLE IF NOT EXISTS DESTINATION (
                                 airport_code TEXT PRIMARY KEY,
                                 airport_name TEXT NOT NULL,
+                                city         TEXT NOT NULL,
+                                country      TEXT NOT NULL)"""
+    
                                 
