@@ -42,11 +42,15 @@ class DBOperations:
                                 FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
                                 FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
 
-    sql_insert_pilot = ""
-    sql_insert_flight = ""
-    sql_insert_destination = ""
-    sql_select_all_flights = "SELECT * FROM FLIGHT"
-                                
+    # Insert SQL
+    sql_insert_pilot       = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
+    sql_insert_destination = "INSERT INTO DESTINATION VALUES (?, ?, ?, ?, ?)"
+    sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+    # Select SQL
+    sql_select_all_flights      = "SELECT * FROM FLIGHT"
+    sql_select_all_pilots       = "SELECT * FROM PILOT"
+    sql_select_all_destinations = "SELECT * FROM DESTINATION"
                                 
     
                                 
