@@ -26,9 +26,21 @@ class DBOperations:
                                 airport_code TEXT PRIMARY KEY,
                                 airport_name TEXT NOT NULL,
                                 city         TEXT NOT NULL,
-                                country      TEXT NOT NULL)"""
+                                country      TEXT NOT NULL,
+                                timezone     TEXT NOT NULL)"""
 
     sql_create_flight_table = """CREATE TABLE IF NOT EXISTS FLIGHT (
+                                flight_number        TEXT NOT NULL,
+                                departure_date       DATE NOT NULL,
+                                departure_time       TIME,
+                                updated_departure_time TIME,
+                                arrival_time         TIME,
+                                status               TEXT,
+                                pilot_id             INTEGER,
+                                airport_code         TEXT,
+                                PRIMARY KEY (flight_number, departure_date),
+                                FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
+                                FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
                                 
     
                                 
