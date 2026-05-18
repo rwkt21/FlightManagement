@@ -115,4 +115,26 @@ def insert_pilot(self):
         except Exception as e:
             print(e)
         finally:
-            self.conn.close()                                
+            self.conn.close()  
+
+ def insert_destination(self):
+        try:
+            self.get_connection()
+            dest = Destination()
+            dest.airport_code = input("Enter airport code (e.g. LHR): ").upper()
+            dest.airport_name = input("Enter airport name: ")
+            dest.city         = input("Enter city: ")
+            dest.country      = input("Enter country: ")
+            dest.timezone     = input("Enter timezone (e.g. UTC+0): ")
+            self.cur.execute(self.sql_insert_destination, (
+                dest.airport_code,
+                dest.airport_name,
+                dest.city,
+                dest.country,
+                dest.timezone))
+            self.conn.commit()
+            print("Destination added successfully")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
