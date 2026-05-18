@@ -6,6 +6,7 @@ import sqlite3
 # This uses SQLite3 for database operations via a command-line interface
 
 #step 1 - creates the tables
+#step 2 - initialises the database connection
 #step 2 - adds sample data to the tables
 #step 3 - provides functions to add, update, delete and query the data
 
@@ -45,6 +46,22 @@ class DBOperations:
     
 # Initalisation and connection [placeholder]
 
+def __init__(self):
+        try:
+            self.conn = sqlite3.connect("FlightManagement.db")
+            self.cur  = self.conn.cursor()
+            self.cur.execute(self.sql_create_pilot_table)
+            self.cur.execute(self.sql_create_destination_table)
+            self.cur.execute(self.sql_create_flight_table)
+            self.conn.commit()
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+def get_connection(self):
+    self.conn = sqlite3.connect("FlightManagement.db")
+    self.cur  = self.conn.cursor()
 
 # Function to importing data from file [placeholder]
 
