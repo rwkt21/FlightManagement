@@ -93,5 +93,26 @@ def seed_data(self):
     sql_select_all_pilots       = "SELECT * FROM PILOT"
     sql_select_all_destinations = "SELECT * FROM DESTINATION"
                                 
-    
-                                
+
+# Insert data     
+def insert_pilot(self):
+        try:
+            self.get_connection()
+            pilot = Pilot()
+            pilot.pilot_id   = int(input("Enter pilot ID: "))
+            pilot.first_name = input("Enter first name: ")
+            pilot.last_name  = input("Enter last name: ")
+            pilot.licence_no = input("Enter licence number: ")
+            pilot.rank       = input("Enter rank (Captain/First Officer): ")
+            self.cur.execute(self.sql_insert_pilot, (
+                pilot.pilot_id,
+                pilot.first_name,
+                pilot.last_name,
+                pilot.licence_no,
+                pilot.rank))
+            self.conn.commit()
+            print("Pilot added successfully")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()                                
