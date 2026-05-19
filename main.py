@@ -159,4 +159,23 @@ def insert_flight(self):
             print(e)
         finally:
             self.conn.close()
+ # ── SELECT ALL ────────────────────────────────────────────
+
+def select_all_flights(self):
+    try:
+        self.get_connection()
+        self.cur.execute(self.sql_select_all_flights)
+        results = self.cur.fetchall()
+        if results:
+            print("\n--- ALL FLIGHTS ---")
+            print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
+            print("-" * 90)
+            for row in results:
+                print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
+        else:
+            print("No flights found")
+    except Exception as e:
+        print(e)
+    finally:
+        self.conn.close()
 
