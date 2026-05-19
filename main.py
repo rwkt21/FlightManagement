@@ -44,7 +44,7 @@ class DBOperations:
                                 FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
 
     
-# Initalisation and connection [placeholder]
+# Initalisation and connection
 
 def __init__(self):
         try:
@@ -65,18 +65,6 @@ def get_connection(self):
 
 # Function to importing data from file [placeholder]
 
-def seed_data(self):
-        try:
-            self.get_connection()
-            with open("seed_data.sql", "r") as f:
-                sql = f.read()
-            self.cur.executescript(sql)
-            self.conn.commit()
-            print("Sample data inserted successfully")
-        except Exception as e:
-            print(e)
-        finally:
-            self.conn.close()
 
 # Insert SQL [placeholder]
     
@@ -92,6 +80,11 @@ def seed_data(self):
     sql_select_all_flights      = "SELECT * FROM FLIGHT"
     sql_select_all_pilots       = "SELECT * FROM PILOT"
     sql_select_all_destinations = "SELECT * FROM DESTINATION"
+
+
+
+
+
                                 
 
 # Insert data     
