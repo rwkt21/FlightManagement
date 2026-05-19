@@ -64,18 +64,7 @@ def get_connection(self):
     self.cur  = self.conn.cursor()
 
 # Function to importing data from file [placeholder]
-def seed_data(self):
-    try:
-        self.get_connection()
-        with open("seed_data.sql", "r") as f:
-            sql = f.read()
-        self.cur.executescript(sql)
-        self.conn.commit()
-        print("Sample data inserted successfully")
-    except Exception as e:
-        print(e)
-    finally:
-        self.conn.close()
+
 
 # Insert SQL [placeholder]
     
