@@ -138,3 +138,32 @@ def insert_pilot(self):
             print(e)
         finally:
             self.conn.close()
+
+def insert_flight(self):
+        try:
+            self.get_connection()
+            flight = Flight()
+            flight.flight_number = input("Enter flight number (e.g. BA201): ").upper()
+            flight.departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            flight.departure_time = input("Enter departure time (HH:MM): ")
+            flight.updated_departure_time = None
+            flight.arrival_time = input("Enter arrival time (HH:MM): ")
+            flight.status = input("Enter status (On Time/Delayed/Cancelled): ")
+            flight.pilot_id = int(input("Enter pilot ID: "))
+            flight.airport_code = input("Enter destination airport code (e.g. LHR): ").upper()
+            self.cur.execute(self.sql_insert_flight, (
+                flight.flight_number,
+                flight.departure_date,
+                flight.departure_time,
+                flight.updated_departure_time,
+                flight.arrival_time,
+                flight.status,
+                flight.pilot_id,
+                flight.airport_code))
+            self.conn.commit()
+            print("Flight added successfully")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
