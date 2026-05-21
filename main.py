@@ -74,9 +74,8 @@ def get_connection(self):
     sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
 
-# Select SQL [placeholder]
+# Select SQL class variables
 
-    # Select SQL
     sql_select_all_flights      = "SELECT * FROM FLIGHT"
     sql_select_all_pilots       = "SELECT * FROM PILOT"
     sql_select_all_destinations = "SELECT * FROM DESTINATION"
@@ -178,4 +177,22 @@ def select_all_flights(self):
         print(e)
     finally:
         self.conn.close()
+
+def select_all_pilots(self):
+        try:
+            self.get_connection()
+            self.cur.execute(self.sql_select_all_pilots)
+            results = self.cur.fetchall()
+            if results:
+                print("\n--- ALL PILOTS ---")
+                print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
+                print("-" * 70)
+                for row in results:
+                    print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
+            else:
+                print("No pilots found")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
 
