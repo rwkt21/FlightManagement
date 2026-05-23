@@ -7,15 +7,15 @@ import sqlite3
 
 #step 1 - creates the tables
 #step 2 - initialises the database connection
-#step 2 - adds sample data to the tables
-#step 3 - provides functions to add, update, delete and query the data
-
+#step 3 - adds sample data to the tables
+#step 4 - provides functions to add, update, delete and query the data
+#step 5 - adds the menu for user to execute functions
 
 
 
 class DBOperations:
 
-    # SQL statement to create tables , it skips this step if the table already exists
+    # skips creation if tables exist
     sql_create_pilot_table = """CREATE TABLE IF NOT EXISTS PILOT (
                                 pilot_id    INTEGER PRIMARY KEY,
                                 first_name  TEXT NOT NULL,
@@ -43,14 +43,14 @@ class DBOperations:
                                 FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
                                 FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
 
-    # Insert SQL [placeholder]
+    # Insert SQL variables
     
     sql_insert_pilot       = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
     sql_insert_destination = "INSERT INTO DESTINATION VALUES (?, ?, ?, ?, ?)"
     sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
     
-    # Initalisation and connection
+    # Initalise and connection
 
     def __init__(self):
         try:
@@ -69,12 +69,12 @@ class DBOperations:
         self.conn = sqlite3.connect("FlightManagement.db")
         self.cur  = self.conn.cursor()
 
-    # Function to importing data from file [placeholder]
+    
 
 
 
 
-    # Select SQL class variables
+    # SQL queries
 
     sql_select_all_flights      = "SELECT * FROM FLIGHT"
     sql_select_all_pilots       = "SELECT * FROM PILOT"
@@ -98,7 +98,7 @@ class DBOperations:
                            WHERE flight_number = ? AND departure_date = ?"""
                                 
 
-    # Insert data     
+    # Function to importing data from file   
     def insert_pilot(self):
         try:
             self.get_connection()
@@ -137,7 +137,7 @@ class DBOperations:
                 dest.country,
                 dest.timezone))
             self.conn.commit()
-            print("Destination added successfully")
+            print("Destination saved successfully")
         except Exception as e:
             print(e)
         finally:
@@ -165,7 +165,7 @@ class DBOperations:
                 flight.pilot_id,
                 flight.airport_code))
             self.conn.commit()
-            print("Flight added successfully")
+            print("Flight added to database")
         except Exception as e:
             print(e)
         finally:
@@ -282,7 +282,7 @@ class DBOperations:
                 departure_date))
             if self.cur.rowcount > 0:
                 self.conn.commit()
-                print("Flight updated successfully")
+                print("Flight schedule updated")
             else:
                 print("No flight found with that number and date")
         except Exception as e:
@@ -302,7 +302,7 @@ class DBOperations:
                 departure_date))
             if self.cur.rowcount > 0:
                 self.conn.commit()
-                print("Pilot assigned successfully")
+                print("Pilot assigned to flight")
             else:
                 print("No flight found with that number and date")
         except Exception as e:
@@ -321,7 +321,7 @@ class DBOperations:
                 self.cur.execute(self.sql_delete_flight, (flight_number, departure_date))
                 if self.cur.rowcount > 0:
                     self.conn.commit()
-                    print("Flight deleted successfully")
+                    print("Flight removed")
                 else:
                     print("No flight found with that number and date")
             else:
@@ -441,4 +441,4 @@ def main_menu():
 if __name__ == "__main__":
     main_menu()
 
-    
+
