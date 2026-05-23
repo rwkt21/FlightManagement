@@ -330,3 +330,46 @@ class DBOperations:
             print(e)
         finally:
             self.conn.close()
+
+#--------------------------
+# DATA CLASSES
+
+class Pilot:
+    def __init__(self):
+        self.pilot_id   = None
+        self.first_name = None
+        self.last_name  = None
+        self.licence_no = None
+        self.rank       = None
+
+    def __str__(self):
+        return f"Pilot ID: {self.pilot_id}, Name: {self.first_name} {self.last_name}, Licence: {self.licence_no}, Rank: {self.rank}"
+
+
+class Destination:
+    def __init__(self):
+        self.airport_code = None
+        self.airport_name = None
+        self.city         = None
+        self.country      = None
+        self.timezone     = None
+
+    def __str__(self):
+        return f"Airport: {self.airport_code} - {self.airport_name}, {self.city}, {self.country} ({self.timezone})"
+
+
+class Flight:
+    def __init__(self):
+        self.flight_number          = None
+        self.departure_date         = None
+        self.departure_time         = None
+        self.updated_departure_time = None
+        self.arrival_time           = None
+        self.status                 = None
+        self.pilot_id               = None
+        self.airport_code           = None
+
+    def __str__(self):
+        return f"Flight: {self.flight_number} on {self.departure_date}, Dep: {self.departure_time}, Arr: {self.arrival_time}, Status: {self.status}"
+
+# IMPORTED DATA
