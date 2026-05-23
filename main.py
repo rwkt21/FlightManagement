@@ -373,3 +373,17 @@ class Flight:
         return f"Flight: {self.flight_number} on {self.departure_date}, Dep: {self.departure_time}, Arr: {self.arrival_time}, Status: {self.status}"
 
 # IMPORTED DATA
+
+def seed_data(db):
+    try:
+        db.get_connection()
+        with open("seed_data.sql", "r") as f:
+            sql = f.read()
+        db.cur.executescript(sql)
+        db.conn.commit()
+        print("Sample data inserted successfully")
+    except Exception as e:
+        print(e)
+    finally:
+        db.conn.close()
+
