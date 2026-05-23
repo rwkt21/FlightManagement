@@ -15,7 +15,7 @@ import sqlite3
 
 class DBOperations:
 
-    # skips creation if tables exist
+    # skips table creation if tables exist
     sql_create_pilot_table = """CREATE TABLE IF NOT EXISTS PILOT (
                                 pilot_id    INTEGER PRIMARY KEY,
                                 first_name  TEXT NOT NULL,
@@ -70,10 +70,6 @@ class DBOperations:
         self.cur  = self.conn.cursor()
 
     
-
-
-
-
     # SQL queries
 
     sql_select_all_flights      = "SELECT * FROM FLIGHT"
@@ -116,10 +112,10 @@ class DBOperations:
                 pilot.rank))
             self.conn.commit()
             print("Pilot added successfully")
-        except Exception as e:
-            print(e)
-        finally:
-            self.conn.close()  
+        except sqlite3.Error as err:
+            print("Database error:", err)
+
+        self.conn.close()
 
     def insert_destination(self):
         try:
@@ -170,19 +166,24 @@ class DBOperations:
             print(e)
         finally:
             self.conn.close()
-    #  SELECT ALL 
+
+    #  Selects All
 
     def select_all_flights(self):
         try:
             self.get_connection()
             self.cur.execute(self.sql_select_all_flights)
-            results = self.cur.fetchall()
-            if results:
+            rows = self.cur.fetchall()
+
+            if not rows:
+                print("No flights found")
+                self.conn.close()
+                return
                 print("\n--- ALL FLIGHTS ---")
-                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
-                print("-" * 90)
-                for row in results:
-                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
+                print("\nFlights:")
+                print("-" * 70)
+                for row in rows:
+                    print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
             else:
                 print("No flights found")
         except Exception as e:
@@ -208,7 +209,7 @@ class DBOperations:
         finally:
             self.conn.close()
 
-    #  SELECT ALL DESTINATIONS 
+    #  Selects all the destinations
     def select_all_destinations(self):
         try:
             self.get_connection()
@@ -227,7 +228,7 @@ class DBOperations:
         finally:
             self.conn.close()
 
-    # SEARCH DATA
+    # Searches Database
     def search_flight(self):
         try:
             self.get_connection()
@@ -267,7 +268,7 @@ class DBOperations:
         finally:
             self.conn.close()
 
-    #  UPDATE DATA
+    #  updates Data
     def update_flight(self):
         try:
             self.get_connection()
@@ -310,7 +311,7 @@ class DBOperations:
         finally:
             self.conn.close()
 
-    #  DELETE DATA 
+    #  Deletes Data 
     def delete_flight(self):
         try:
             self.get_connection()
@@ -331,8 +332,9 @@ class DBOperations:
         finally:
             self.conn.close()
 
+
+# The Classes
 #--------------------------
-# DATA CLASSES
 
 class Pilot:
     def __init__(self):
@@ -372,7 +374,8 @@ class Flight:
     def __str__(self):
         return f"Flight: {self.flight_number} on {self.departure_date}, Dep: {self.departure_time}, Arr: {self.arrival_time}, Status: {self.status}"
 
-# IMPORTED DATA
+# Imports the Data
+# -----------------
 
 def import_data(db):
     try:
@@ -387,7 +390,8 @@ def import_data(db):
     finally:
         db.conn.close()
 
-# MAIN MENU
+# Main Menu
+# -----------------
 
 def main_menu():
     db = DBOperations()
