@@ -43,8 +43,14 @@ class DBOperations:
                                 FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
                                 FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
 
+    # Insert SQL [placeholder]
     
-# Initalisation and connection
+    sql_insert_pilot       = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
+    sql_insert_destination = "INSERT INTO DESTINATION VALUES (?, ?, ?, ?, ?)"
+    sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+
+    
+    # Initalisation and connection
 
     def __init__(self):
         try:
@@ -63,26 +69,36 @@ class DBOperations:
         self.conn = sqlite3.connect("FlightManagement.db")
         self.cur  = self.conn.cursor()
 
-# Function to importing data from file [placeholder]
+    # Function to importing data from file [placeholder]
 
 
-# Insert SQL [placeholder]
-    
-    sql_insert_pilot       = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
-    sql_insert_destination = "INSERT INTO DESTINATION VALUES (?, ?, ?, ?, ?)"
-    sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
 
-# Select SQL class variables
+    # Select SQL class variables
 
     sql_select_all_flights      = "SELECT * FROM FLIGHT"
     sql_select_all_pilots       = "SELECT * FROM PILOT"
     sql_select_all_destinations = "SELECT * FROM DESTINATION"
 
+    sql_search_flight = """SELECT * FROM FLIGHT
+                           WHERE flight_number = ?
+                           AND departure_date = ?"""
 
+    sql_search_pilot  = "SELECT * FROM PILOT WHERE pilot_id = ?"
+
+    sql_update_flight = """UPDATE FLIGHT
+                           SET updated_departure_time = ?, status = ?
+                           WHERE flight_number = ? AND departure_date = ?"""
+
+    sql_assign_pilot  = """UPDATE FLIGHT
+                           SET pilot_id = ?
+                           WHERE flight_number = ? AND departure_date = ?"""
+
+    sql_delete_flight = """DELETE FROM FLIGHT
+                           WHERE flight_number = ? AND departure_date = ?"""
                                 
 
-# Insert data     
+    # Insert data     
     def insert_pilot(self):
         try:
             self.get_connection()
@@ -154,7 +170,7 @@ class DBOperations:
             print(e)
         finally:
             self.conn.close()
- #  SELECT ALL 
+    #  SELECT ALL 
 
     def select_all_flights(self):
         try:
@@ -175,24 +191,24 @@ class DBOperations:
             self.conn.close()
 
     def select_all_pilots(self):
-            try:
-                self.get_connection()
-                self.cur.execute(self.sql_select_all_pilots)
-                results = self.cur.fetchall()
-                if results:
-                    print("\n--- ALL PILOTS ---")
-                    print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
-                    print("-" * 70)
-                    for row in results:
-                        print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
-                else:
-                    print("No pilots found")
-            except Exception as e:
-                print(e)
-            finally:
-                self.conn.close()
+        try:
+            self.get_connection()
+            self.cur.execute(self.sql_select_all_pilots)
+            results = self.cur.fetchall()
+            if results:
+                print("\n--- ALL PILOTS ---")
+                print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
+                print("-" * 70)
+                for row in results:
+                    print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
+            else:
+                print("No pilots found")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
 
-#  SELECT ALL DESTINATIONS 
+    #  SELECT ALL DESTINATIONS 
     def select_all_destinations(self):
         try:
             self.get_connection()
