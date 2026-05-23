@@ -46,7 +46,7 @@ class DBOperations:
     
 # Initalisation and connection
 
-def __init__(self):
+    def __init__(self):
         try:
             self.conn = sqlite3.connect("FlightManagement.db")
             self.cur  = self.conn.cursor()
@@ -59,16 +59,15 @@ def __init__(self):
         finally:
             self.conn.close()
 
-def get_connection(self):
-    self.conn = sqlite3.connect("FlightManagement.db")
-    self.cur  = self.conn.cursor()
+    def get_connection(self):
+        self.conn = sqlite3.connect("FlightManagement.db")
+        self.cur  = self.conn.cursor()
 
 # Function to importing data from file [placeholder]
 
 
 # Insert SQL [placeholder]
     
-    # Insert SQL
     sql_insert_pilot       = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
     sql_insert_destination = "INSERT INTO DESTINATION VALUES (?, ?, ?, ?, ?)"
     sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
@@ -81,13 +80,10 @@ def get_connection(self):
     sql_select_all_destinations = "SELECT * FROM DESTINATION"
 
 
-
-
-
                                 
 
 # Insert data     
-def insert_pilot(self):
+    def insert_pilot(self):
         try:
             self.get_connection()
             pilot = Pilot()
@@ -109,7 +105,7 @@ def insert_pilot(self):
         finally:
             self.conn.close()  
 
- def insert_destination(self):
+    def insert_destination(self):
         try:
             self.get_connection()
             dest = Destination()
@@ -131,7 +127,7 @@ def insert_pilot(self):
         finally:
             self.conn.close()
 
-def insert_flight(self):
+    def insert_flight(self):
         try:
             self.get_connection()
             flight = Flight()
@@ -160,41 +156,41 @@ def insert_flight(self):
             self.conn.close()
  #  SELECT ALL 
 
-def select_all_flights(self):
-    try:
-        self.get_connection()
-        self.cur.execute(self.sql_select_all_flights)
-        results = self.cur.fetchall()
-        if results:
-            print("\n--- ALL FLIGHTS ---")
-            print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
-            print("-" * 90)
-            for row in results:
-                print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
-        else:
-            print("No flights found")
-    except Exception as e:
-        print(e)
-    finally:
-        self.conn.close()
-
-def select_all_pilots(self):
+    def select_all_flights(self):
         try:
             self.get_connection()
-            self.cur.execute(self.sql_select_all_pilots)
+            self.cur.execute(self.sql_select_all_flights)
             results = self.cur.fetchall()
             if results:
-                print("\n--- ALL PILOTS ---")
-                print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
-                print("-" * 70)
+                print("\n--- ALL FLIGHTS ---")
+                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
+                print("-" * 90)
                 for row in results:
-                    print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
+                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
             else:
-                print("No pilots found")
+                print("No flights found")
         except Exception as e:
             print(e)
         finally:
             self.conn.close()
+
+    def select_all_pilots(self):
+            try:
+                self.get_connection()
+                self.cur.execute(self.sql_select_all_pilots)
+                results = self.cur.fetchall()
+                if results:
+                    print("\n--- ALL PILOTS ---")
+                    print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
+                    print("-" * 70)
+                    for row in results:
+                        print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
+                else:
+                    print("No pilots found")
+            except Exception as e:
+                print(e)
+            finally:
+                self.conn.close()
 
 #  SELECT ALL DESTINATIONS 
     def select_all_destinations(self):
