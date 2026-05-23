@@ -374,7 +374,7 @@ class Flight:
 
 # IMPORTED DATA
 
-def seed_data(db):
+def import_data(db):
     try:
         db.get_connection()
         with open("seed_data.sql", "r") as f:
@@ -387,3 +387,58 @@ def seed_data(db):
     finally:
         db.conn.close()
 
+# MAIN MENU
+
+def main_menu():
+    db = DBOperations()
+    while True:
+        print("\n--- FLIGHT MANAGEMENT SYSTEM ---")
+        print("1. Add Pilot")
+        print("2. Add Destination")
+        print("3. Add Flight")
+        print("4. View All Flights")
+        print("5. View All Pilots")
+        print("6. View All Destinations")
+        print("7. Search Flight")
+        print("8. Search Pilot")
+        print("9. Update Flight")
+        print("10. Assign Pilot to Flight")
+        print("11. Delete Flight")
+        print("12. Import Sample Data")
+        print("0. Exit")
+        choice = input("Enter your choice: ")
+        
+        if choice == "1":
+            db.insert_pilot()
+        elif choice == "2":
+            db.insert_destination()
+        elif choice == "3":
+            db.insert_flight()
+        elif choice == "4":
+            db.select_all_flights()
+        elif choice == "5":
+            db.select_all_pilots()
+        elif choice == "6":
+            db.select_all_destinations()
+        elif choice == "7":
+            db.search_flight()
+        elif choice == "8":
+            db.search_pilot()
+        elif choice == "9":
+            db.update_flight()
+        elif choice == "10":
+            db.assign_pilot()
+        elif choice == "11":
+            db.delete_flight()
+        elif choice == "12":
+            import_data(db)
+        elif choice == "0":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice, please try again.")
+
+if __name__ == "__main__":
+    main_menu()
+
+    
