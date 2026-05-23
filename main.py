@@ -173,21 +173,22 @@ class DBOperations:
         try:
             self.get_connection()
             self.cur.execute(self.sql_select_all_flights)
+
             rows = self.cur.fetchall()
 
             if not rows:
                 print("No flights found")
-                self.conn.close()
                 return
-                print("\n--- ALL FLIGHTS ---")
-                print("\nFlights:")
-                print("-" * 70)
-                for row in rows:
-                    print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
-            else:
-                print("No flights found")
-        except Exception as e:
-            print(e)
+
+            print("\nFlights:")
+            print("-" * 70)
+
+            for row in rows:
+                print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
+
+        except sqlite3.Error as err:
+            print("Database error:", err)
+
         finally:
             self.conn.close()
 
@@ -195,12 +196,12 @@ class DBOperations:
         try:
             self.get_connection()
             self.cur.execute(self.sql_select_all_pilots)
-            results = self.cur.fetchall()
-            if results:
+            rows = self.cur.fetchall()
+            if rows:
                 print("\n--- ALL PILOTS ---")
                 print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
                 print("-" * 70)
-                for row in results:
+                for row in rows:
                     print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
             else:
                 print("No pilots found")
@@ -214,12 +215,12 @@ class DBOperations:
         try:
             self.get_connection()
             self.cur.execute(self.sql_select_all_destinations)
-            results = self.cur.fetchall()
-            if results:
+            rows = self.cur.fetchall()
+            if rows:
                 print("\n--- ALL DESTINATIONS ---")
                 print(f"{'Airport Code':<14}{'Airport Name':<40}{'City':<15}{'Country':<20}{'Timezone'}")
                 print("-" * 100)
-                for row in results:
+                for row in rows:
                     print(f"{str(row[0]):<14}{str(row[1]):<40}{str(row[2]):<15}{str(row[3]):<20}{str(row[4])}")
             else:
                 print("No destinations found")
@@ -232,7 +233,7 @@ class DBOperations:
     def search_flight(self):
         try:
             self.get_connection()
-            flight_number  = input("Enter flight number: ").upper()
+            flight_number  = input("flight number: ").upper()
             departure_date = input("Enter departure date (YYYY-MM-DD): ")
             self.cur.execute(self.sql_search_flight, (flight_number, departure_date))
             results = self.cur.fetchall()
@@ -398,9 +399,9 @@ def main_menu():
     while True:
         print("\n--- FLIGHT MANAGEMENT SYSTEM ---")
         print("1. Add Pilot")
-        print("2. Add Destination")
-        print("3. Add Flight")
-        print("4. View All Flights")
+        print("2. Add a Destination")
+        print("3. Add a Flight")
+        print("4. View All flights")
         print("5. View All Pilots")
         print("6. View All Destinations")
         print("7. Search Flight")
