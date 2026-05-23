@@ -39,7 +39,7 @@ class DBOperations:
                                 status               TEXT,
                                 pilot_id             INTEGER,
                                 airport_code         TEXT,
-                                PRIMARY KEY (flight_number + departure_date),
+                                PRIMARY KEY (flight_number , departure_date),
                                 FOREIGN KEY (pilot_id) REFERENCES PILOT(pilot_id),
                                 FOREIGN KEY (airport_code) REFERENCES DESTINATION(airport_code))"""
 
@@ -158,7 +158,7 @@ def insert_flight(self):
             print(e)
         finally:
             self.conn.close()
- # ── SELECT ALL ────────────────────────────────────────────
+ #  SELECT ALL 
 
 def select_all_flights(self):
     try:
@@ -196,3 +196,125 @@ def select_all_pilots(self):
         finally:
             self.conn.close()
 
+#  SELECT ALL DESTINATIONS 
+    def select_all_destinations(self):
+        try:
+            self.get_connection()
+            self.cur.execute(self.sql_select_all_destinations)
+            results = self.cur.fetchall()
+            if results:
+                print("\n--- ALL DESTINATIONS ---")
+                print(f"{'Airport Code':<14}{'Airport Name':<40}{'City':<15}{'Country':<20}{'Timezone'}")
+                print("-" * 100)
+                for row in results:
+                    print(f"{str(row[0]):<14}{str(row[1]):<40}{str(row[2]):<15}{str(row[3]):<20}{str(row[4])}")
+            else:
+                print("No destinations found")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+    # SEARCH DATA
+    def search_flight(self):
+        try:
+            self.get_connection()
+            flight_number  = input("Enter flight number: ").upper()
+            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            self.cur.execute(self.sql_search_flight, (flight_number, departure_date))
+            results = self.cur.fetchall()
+            if results:
+                print("\n--- FLIGHT FOUND ---")
+                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
+                print("-" * 90)
+                for row in results:
+                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
+            else:
+                print("No flight found with that number and date")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+    def search_pilot(self):
+        try:
+            self.get_connection()
+            pilot_id = int(input("Enter pilot ID: "))
+            self.cur.execute(self.sql_search_pilot, (pilot_id,))
+            results = self.cur.fetchall()
+            if results:
+                print("\n--- PILOT FOUND ---")
+                print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
+                print("-" * 70)
+                for row in results:
+                    print(f"{str(row[0]):<12}{str(row[1]):<15}{str(row[2]):<15}{str(row[3]):<18}{str(row[4])}")
+            else:
+                print("No pilot found with that ID")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+    #  UPDATE DATA
+    def update_flight(self):
+        try:
+            self.get_connection()
+            flight_number          = input("Enter flight number to update: ").upper()
+            departure_date         = input("Enter departure date (YYYY-MM-DD): ")
+            updated_departure_time = input("Enter updated departure time (HH:MM): ")
+            status                 = input("Enter new status (On Time/Delayed/Cancelled): ")
+            self.cur.execute(self.sql_update_flight, (
+                updated_departure_time,
+                status,
+                flight_number,
+                departure_date))
+            if self.cur.rowcount > 0:
+                self.conn.commit()
+                print("Flight updated successfully")
+            else:
+                print("No flight found with that number and date")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+    def assign_pilot(self):
+        try:
+            self.get_connection()
+            flight_number  = input("Enter flight number: ").upper()
+            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            pilot_id       = int(input("Enter new pilot ID: "))
+            self.cur.execute(self.sql_assign_pilot, (
+                pilot_id,
+                flight_number,
+                departure_date))
+            if self.cur.rowcount > 0:
+                self.conn.commit()
+                print("Pilot assigned successfully")
+            else:
+                print("No flight found with that number and date")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+    #  DELETE DATA 
+    def delete_flight(self):
+        try:
+            self.get_connection()
+            flight_number  = input("Enter flight number to delete: ").upper()
+            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            confirm        = input(f"Are you sure you want to delete {flight_number} on {departure_date}? (yes/no): ")
+            if confirm.lower() == "yes":
+                self.cur.execute(self.sql_delete_flight, (flight_number, departure_date))
+                if self.cur.rowcount > 0:
+                    self.conn.commit()
+                    print("Flight deleted successfully")
+                else:
+                    print("No flight found with that number and date")
+            else:
+                print("Delete cancelled")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
