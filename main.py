@@ -180,7 +180,7 @@ class DBOperations:
                 print("No flights found")
                 self.conn.close()
                 return
-                print("\n--- ALL FLIGHTS ---")
+                print("\nALL FLIGHTS")
                 print("\nFlights:")
                 print("-" * 70)
                 for row in rows:
