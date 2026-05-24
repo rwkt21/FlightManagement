@@ -175,11 +175,8 @@ class DBOperations:
             self.cur.execute(self.sql_select_all_flights)
             rows = self.cur.fetchall()
 
-            if not rows:
-                print("No flights found")
-                self.conn.close()
-                return
-                print("\n--- ALL FLIGHTS ---")
+            if rows:
+                print("\nALL FLIGHTS")
                 print("\nFlights:")
                 print("-" * 70)
                 for row in rows:
