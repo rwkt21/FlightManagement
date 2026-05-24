@@ -62,7 +62,7 @@ class DBOperations:
             self.cur.execute(self.sql_create_flight_table)
             self.conn.commit()
 
-            # load sample data on first run only
+            # load data on first run only
             self.cur.execute("SELECT COUNT(*) FROM DESTINATION")
             count = self.cur.fetchone()[0]
             if count == 0:
@@ -387,21 +387,6 @@ class Flight:
     def __str__(self):
         return f"Flight: {self.flight_number} on {self.departure_date}, Dep: {self.departure_time}, Arr: {self.arrival_time}, Status: {self.status}"
 
-# Imports the Data
-# -----------------
-
-def import_data(db):
-    try:
-        db.get_connection()
-        with open("seed_data.sql", "r") as f:
-            sql = f.read()
-        db.cur.executescript(sql)
-        db.conn.commit()
-        print("Sample data inserted successfully")
-    except Exception as e:
-        print(e)
-    finally:
-        db.conn.close()
 
 # Main Menu
 # -----------------
@@ -446,8 +431,6 @@ def main_menu():
             db.assign_pilot()
         elif choice == "11":
             db.delete_flight()
-        elif choice == "12":
-            import_data(db)
         elif choice == "0":
             print("Closing...")
             break
