@@ -1,4 +1,5 @@
 import sqlite3
+from datetime import datetime
 
 # Flight Management System
 #-------------------------
@@ -160,7 +161,15 @@ class DBOperations:
             self.get_connection()
             flight = Flight()
             flight.flight_number = input("Enter flight number (e.g. BA201): ").upper()
-            flight.departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            while True:
+                flight.departure_date = input("Enter departure date (YYYY-MM-DD): ")
+                try:
+                    datetime.strptime(flight.departure_date, "%Y-%m-%d")
+                    break
+                except ValueError:
+                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
+                     
+            
             flight.departure_time = input("Enter departure time (HH:MM): ")
             flight.updated_departure_time = None
             flight.arrival_time = input("Enter arrival time (HH:MM): ")
@@ -246,7 +255,15 @@ class DBOperations:
         try:
             self.get_connection()
             flight_number  = input("flight number: ").upper()
-            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            while True:
+                departure_date = input("Enter departure date (YYYY-MM-DD): ")
+                try:
+                    datetime.strptime(departure_date, "%Y-%m-%d")
+                    break
+                except ValueError:
+                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
+
+
             self.cur.execute(self.sql_search_flight, (flight_number, departure_date))
             results = self.cur.fetchall()
             if results:
@@ -286,7 +303,15 @@ class DBOperations:
         try:
             self.get_connection()
             flight_number  = input("Enter flight number to update: ").upper()
-            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            while True:
+                departure_date = input("Enter departure date (YYYY-MM-DD): ")
+                try:
+                    datetime.strptime(departure_date, "%Y-%m-%d")
+                    break
+                except ValueError:
+                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
+
+
             updated_departure_time = input("Enter updated departure time (HH:MM): ")
             status = input("Enter new status (On Time/Delayed/Cancelled): ")
             self.cur.execute(self.sql_update_flight, (
@@ -308,7 +333,13 @@ class DBOperations:
         try:
             self.get_connection()
             flight_number = input("Enter flight number: ").upper()
-            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            while True:
+                departure_date = input("Enter departure date (YYYY-MM-DD): ")
+                try:
+                    datetime.strptime(departure_date, "%Y-%m-%d")
+                    break
+                except ValueError:
+                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
             pilot_id = int(input("Enter new pilot ID: "))
             self.cur.execute(self.sql_assign_pilot, (
                 pilot_id,
@@ -329,7 +360,13 @@ class DBOperations:
         try:
             self.get_connection()
             flight_number = input("Enter flight number to delete: ").upper()
-            departure_date = input("Enter departure date (YYYY-MM-DD): ")
+            while True:
+                departure_date = input("Enter departure date (YYYY-MM-DD): ")
+                try:
+                    datetime.strptime(departure_date, "%Y-%m-%d")
+                    break
+                except ValueError:
+                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
             confirm = input(f"Are you sure you want to delete {flight_number} on {departure_date}? (yes/no): ")
             if confirm.lower() == "yes":
                 self.cur.execute(self.sql_delete_flight, (flight_number, departure_date))
