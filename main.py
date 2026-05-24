@@ -178,17 +178,17 @@ class DBOperations:
 
             if not rows:
                 print("No flights found")
+                self.conn.close()
                 return
-
-            print("\nFlights:")
-            print("-" * 70)
-
-            for row in rows:
-                print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
-
-        except sqlite3.Error as err:
-            print("Database error:", err)
-
+                print("\n--- ALL FLIGHTS ---")
+                print("\nFlights:")
+                print("-" * 70)
+                for row in rows:
+                    print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
+            else:
+                print("No flights found")
+        except Exception as e:
+            print(e)
         finally:
             self.conn.close()
 
