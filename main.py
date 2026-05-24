@@ -194,15 +194,11 @@ class DBOperations:
 
             if not rows:
                 print("No flights found")
-                self.conn.close()
-                return
-                print("\nALL FLIGHTS")
-                print("\nFlights:")
+            else:
+                print("\nList of All Flights")
                 print("-" * 70)
                 for row in rows:
                     print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
-            else:
-                print("No flights found")
         except Exception as e:
             print(e)
         finally:
@@ -214,7 +210,7 @@ class DBOperations:
             self.cur.execute(self.sql_select_all_pilots)
             rows = self.cur.fetchall()
             if rows:
-                print("\n--- ALL PILOTS ---")
+                print("\nList of All Pilots")
                 print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
                 print("-" * 70)
                 for row in rows:
@@ -233,7 +229,7 @@ class DBOperations:
             self.cur.execute(self.sql_select_all_destinations)
             rows = self.cur.fetchall()
             if rows:
-                print("\n--- ALL DESTINATIONS ---")
+                print("\n List of All Destinations")
                 print(f"{'Airport Code':<14}{'Airport Name':<40}{'City':<15}{'Country':<20}{'Timezone'}")
                 print("-" * 100)
                 for row in rows:
@@ -254,7 +250,7 @@ class DBOperations:
             self.cur.execute(self.sql_search_flight, (flight_number, departure_date))
             results = self.cur.fetchall()
             if results:
-                print("\n--- FLIGHT FOUND ---")
+                print("\nFlight Found")
                 print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
                 print("-" * 90)
                 for row in results:
@@ -273,7 +269,7 @@ class DBOperations:
             self.cur.execute(self.sql_search_pilot, (pilot_id,))
             results = self.cur.fetchall()
             if results:
-                print("\n--- PILOT FOUND ---")
+                print("\nPilot Found")
                 print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
                 print("-" * 70)
                 for row in results:
@@ -289,10 +285,10 @@ class DBOperations:
     def update_flight(self):
         try:
             self.get_connection()
-            flight_number          = input("Enter flight number to update: ").upper()
-            departure_date         = input("Enter departure date (YYYY-MM-DD): ")
+            flight_number  = input("Enter flight number to update: ").upper()
+            departure_date = input("Enter departure date (YYYY-MM-DD): ")
             updated_departure_time = input("Enter updated departure time (HH:MM): ")
-            status                 = input("Enter new status (On Time/Delayed/Cancelled): ")
+            status = input("Enter new status (On Time/Delayed/Cancelled): ")
             self.cur.execute(self.sql_update_flight, (
                 updated_departure_time,
                 status,
@@ -311,9 +307,9 @@ class DBOperations:
     def assign_pilot(self):
         try:
             self.get_connection()
-            flight_number  = input("Enter flight number: ").upper()
+            flight_number = input("Enter flight number: ").upper()
             departure_date = input("Enter departure date (YYYY-MM-DD): ")
-            pilot_id       = int(input("Enter new pilot ID: "))
+            pilot_id = int(input("Enter new pilot ID: "))
             self.cur.execute(self.sql_assign_pilot, (
                 pilot_id,
                 flight_number,
@@ -332,9 +328,9 @@ class DBOperations:
     def delete_flight(self):
         try:
             self.get_connection()
-            flight_number  = input("Enter flight number to delete: ").upper()
+            flight_number = input("Enter flight number to delete: ").upper()
             departure_date = input("Enter departure date (YYYY-MM-DD): ")
-            confirm        = input(f"Are you sure you want to delete {flight_number} on {departure_date}? (yes/no): ")
+            confirm = input(f"Are you sure you want to delete {flight_number} on {departure_date}? (yes/no): ")
             if confirm.lower() == "yes":
                 self.cur.execute(self.sql_delete_flight, (flight_number, departure_date))
                 if self.cur.rowcount > 0:
@@ -425,7 +421,6 @@ def main_menu():
         print("9. Update Flight")
         print("10. Assign Pilot to Flight")
         print("11. Delete Flight")
-        print("12. Import Sample Data")
         print("0. Exit")
         choice = input("Enter your choice: ")
         
