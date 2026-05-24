@@ -52,18 +52,34 @@ class DBOperations:
     
     # Initalise and connection
 
+     
     def __init__(self):
         try:
             self.conn = sqlite3.connect("FlightManagement.db")
-            self.cur  = self.conn.cursor()
+            self.cur = self.conn.cursor()
             self.cur.execute(self.sql_create_pilot_table)
             self.cur.execute(self.sql_create_destination_table)
             self.cur.execute(self.sql_create_flight_table)
             self.conn.commit()
+
+            # load sample data on first run only
+            self.cur.execute("SELECT COUNT(*) FROM DESTINATION")
+            count = self.cur.fetchone()[0]
+            if count == 0:
+                with open("seed_data.sql", "r") as f:
+                    sql = f.read()
+                self.cur.executescript(sql)
+                self.conn.commit()
+                print("Sample data loaded.")
+
         except Exception as e:
             print(e)
+
         finally:
-            self.conn.close()
+            try:
+                self.conn.close()
+            except Exception:
+                pass
 
     def get_connection(self):
         self.conn = sqlite3.connect("FlightManagement.db")
