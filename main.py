@@ -185,7 +185,19 @@ class DBOperations:
                     break
                 except ValueError:
                     print("Invalid time. Please use HH:MM e.g. 09:30")
-            flight.status = input("Enter status (On Time/Delayed/Cancelled): ")
+            while True:
+                status_input = input("Enter status - O (On Time), D (Delayed), C (Cancelled): ").upper()
+                if status_input == "O":
+                    flight.status = "On Time"
+                    break
+                elif status_input == "D":
+                    flight.status = "Delayed"
+                    break
+                elif status_input == "C":
+                    flight.status = "Cancelled"
+                    break
+                else:
+                    print("Invalid input. Please enter O, D or C")
             flight.pilot_id = int(input("Enter pilot ID: "))
             flight.airport_code = input("Enter destination airport code (e.g. LHR): ").upper()
             self.cur.execute(self.sql_insert_flight, (
@@ -331,7 +343,19 @@ class DBOperations:
                     break
                 except ValueError:
                     print("Invalid time. Please use HH:MM e.g. 14:45")
-            status = input("Enter new status (On Time/Delayed/Cancelled): ")
+            while True:
+                status_input = input("Enter status - O (On Time), D (Delayed), C (Cancelled): ").upper()
+                if status_input == "O":
+                    status = "On Time"
+                    break
+                elif status_input == "D":
+                    status = "Delayed"
+                    break
+                elif status_input == "C":
+                    status = "Cancelled"
+                    break
+                else:
+                    print("Invalid input. Please enter O, D or C")
             self.cur.execute(self.sql_update_flight, (
                 updated_departure_time,
                 status,
