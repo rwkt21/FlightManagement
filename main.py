@@ -170,9 +170,21 @@ class DBOperations:
                     print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
                      
             
-            flight.departure_time = input("Enter departure time (HH:MM): ")
+            while True:
+                flight.departure_time = input("Enter departure time (HH:MM): ")
+                try:
+                    datetime.strptime(flight.departure_time, "%H:%M")
+                    break
+                except ValueError:
+                    print("Invalid time. Please use HH:MM e.g. 09:30")
             flight.updated_departure_time = None
-            flight.arrival_time = input("Enter arrival time (HH:MM): ")
+            while True:
+                flight.arrival_time = input("Enter arrival time (HH:MM): ")
+                try:
+                    datetime.strptime(flight.arrival_time, "%H:%M")
+                    break
+                except ValueError:
+                    print("Invalid time. Please use HH:MM e.g. 09:30")
             flight.status = input("Enter status (On Time/Delayed/Cancelled): ")
             flight.pilot_id = int(input("Enter pilot ID: "))
             flight.airport_code = input("Enter destination airport code (e.g. LHR): ").upper()
@@ -312,7 +324,13 @@ class DBOperations:
                     print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
 
 
-            updated_departure_time = input("Enter updated departure time (HH:MM): ")
+            while True:
+                updated_departure_time = input("Enter updated departure time (HH:MM): ")
+                try:
+                    datetime.strptime(updated_departure_time, "%H:%M")
+                    break
+                except ValueError:
+                    print("Invalid time. Please use HH:MM e.g. 14:45")
             status = input("Enter new status (On Time/Delayed/Cancelled): ")
             self.cur.execute(self.sql_update_flight, (
                 updated_departure_time,
