@@ -116,11 +116,27 @@ class DBOperations:
         try:
             self.get_connection()
             pilot = Pilot()
-            pilot.pilot_id = int(input("Enter pilot ID: "))
+            while True:
+                try:
+                    pilot.pilot_id = int(input("Enter pilot ID: "))
+                    break
+                except ValueError:
+                    print("Pilot ID must be a number. Please try again.")
+                        
+            
             pilot.first_name = input("Enter first name: ")
             pilot.last_name = input("Enter last name: ")
             pilot.licence_no = input("Enter licence number: ")
-            pilot.rank = input("Enter rank (Captain/First Officer): ")
+            while True:
+                rank_input = input("Enter rank - C (Captain), F (First Officer): ").upper()
+                if rank_input == "C":
+                    pilot.rank = "Captain"
+                    break
+                elif rank_input == "F":
+                    pilot.rank = "First Officer"
+                    break
+                else:
+                    print("Invalid input. Please enter C or F")
             self.cur.execute(self.sql_insert_pilot, (
                 pilot.pilot_id,
                 pilot.first_name,
@@ -198,7 +214,12 @@ class DBOperations:
                     break
                 else:
                     print("Invalid input. Please enter O, D or C")
-            flight.pilot_id = int(input("Enter pilot ID: "))
+            while True:
+                try:
+                    flight.pilot_id = int(input("Enter pilot ID: "))
+                    break
+                except ValueError:
+                    print("Pilot ID must be a number. Please try again.")
             flight.airport_code = input("Enter destination airport code (e.g. LHR): ").upper()
             self.cur.execute(self.sql_insert_flight, (
                 flight.flight_number,
@@ -306,7 +327,12 @@ class DBOperations:
     def search_pilot(self):
         try:
             self.get_connection()
-            pilot_id = int(input("Enter pilot ID: "))
+            while True:
+                try:
+                    pilot_id = int(input("Enter pilot ID: "))
+                    break
+                except ValueError:
+                    print("Pilot ID must be a number. Please try again.")
             self.cur.execute(self.sql_search_pilot, (pilot_id,))
             results = self.cur.fetchall()
             if results:
