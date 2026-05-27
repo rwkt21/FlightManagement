@@ -122,7 +122,10 @@ class DBOperations:
                     break
                 except ValueError:
                     print("Pilot ID must be a number. Please try again.")
-                        
+                self.cur.execute("SELECT COUNT(*) FROM PILOT WHERE pilot_id = ?", (pilot.pilot_id,))
+                if self.cur.fetchone()[0] > 0:
+                    print(f"Pilot ID {pilot.pilot_id} already exists. Please use a different ID.")
+                    return        
             
             pilot.first_name = input("Enter first name: ")
             pilot.last_name = input("Enter last name: ")
@@ -154,7 +157,17 @@ class DBOperations:
         try:
             self.get_connection()
             dest = Destination()
-            dest.airport_code = input("Enter airport code (e.g. LHR): ").upper()
+            while True:
+                dest.airport_code = input("Enter airport code (e.g. LHR): ").upper()
+                if len(dest.airport_code) == 3 and dest.airport_code.isalpha():
+                    self.cur.execute("SELECT COUNT(*) FROM DESTINATION WHERE airport_code = ?", (dest.airport_code,))
+                    if self.cur.fetchone()[0] > 0:
+                        print(f"{dest.airport_code} already exists. Please use a different code.")
+                    else:
+                        break
+                else:
+                    print("Airport code must be exactly 3 letters e.g. LHR")
+            
             dest.airport_name = input("Enter airport name: ")
             dest.city         = input("Enter city: ")
             dest.country      = input("Enter country: ")
@@ -184,7 +197,10 @@ class DBOperations:
                     break
                 except ValueError:
                     print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
-                     
+            self.cur.execute("SELECT COUNT(*) FROM FLIGHT WHERE flight_number = ? AND departure_date = ?", (flight.flight_number, flight.departure_date))
+            if self.cur.fetchone()[0] > 0:
+                print(f"Flight {flight.flight_number} on {flight.departure_date} already exists.")
+                return         
             
             while True:
                 flight.departure_time = input("Enter departure time (HH:MM): ")
@@ -408,7 +424,12 @@ class DBOperations:
                     break
                 except ValueError:
                     print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
-            pilot_id = int(input("Enter new pilot ID: "))
+            while True:
+                try:
+                    pilot_id = int(input("Enter new pilot ID: "))
+                    break
+                except ValueError:
+                    print("Pilot ID must be a number. Please try again.")
             self.cur.execute(self.sql_assign_pilot, (
                 pilot_id,
                 flight_number,
