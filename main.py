@@ -447,13 +447,28 @@ class DBOperations:
         try:
             self.get_connection()
             flight_number = input("Enter flight number: ").upper()
+            self.cur.execute("SELECT * FROM FLIGHT WHERE flight_number = ?", (flight_number,))
+            results = self.cur.fetchall()
+            if not results:
+                print(f"No flights found for {flight_number}")
+                return
+            print(f"\nFlights found for {flight_number}:")
+            print(f"{'#':<5}{'Date':<14}{'Dep Time':<12}{'Arr Time':<12}{'Status':<12}{'Current Pilot ID'}")
+            print("-" * 70)
+            for i, row in enumerate(results, 1):
+                print(f"{str(i):<5}{str(row[1]):<14}{str(row[2]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6])}")
             while True:
-                departure_date = input("Enter departure date (YYYY-MM-DD): ")
                 try:
-                    datetime.strptime(departure_date, "%Y-%m-%d")
-                    break
+                    choice = int(input("\nEnter the number of the flight to assign a pilot to: "))
+                    if 1 <= choice <= len(results):
+                        break
+                    else:
+                        print(f"Please enter a number between 1 and {len(results)}")
                 except ValueError:
-                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
+                    print("Please enter a valid number")
+            selected = results[choice - 1]
+            departure_date = selected[1]
+            print(f"\nAssigning pilot to {flight_number} on {departure_date}")
             while True:
                 try:
                     pilot_id = int(input("Enter new pilot ID: "))
