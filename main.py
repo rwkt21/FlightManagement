@@ -109,7 +109,33 @@ class DBOperations:
 
     sql_delete_flight = """DELETE FROM FLIGHT
                            WHERE flight_number = ? AND departure_date = ?"""
-                                
+
+    sql_flights_with_pilots = """SELECT f.flight_number, f.departure_date,
+                                        f.departure_time, f.status,
+                                        p.first_name, p.last_name, p.rank
+                                 FROM FLIGHT f
+                                 JOIN PILOT p ON f.pilot_id = p.pilot_id
+                                 ORDER BY f.departure_date"""
+    
+    #  Function to show all flights and assigned pilots
+    def flights_with_pilots(self):
+        try:
+            self.get_connection()
+            self.cur.execute(self.sql_flights_with_pilots)
+            results = self.cur.fetchall()
+            if results:
+                print("\nFlights and Assigned Pilots")
+                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Status':<12}{'First Name':<15}{'Last Name':<15}{'Rank'}")
+                print("-" * 90)
+                for row in results:
+                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<15}{str(row[5]):<15}{str(row[6])}")
+            else:
+                print("No flights found")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
 
     # Function to importing data from file   
     def insert_pilot(self):
@@ -532,6 +558,7 @@ def main_menu():
         print("9. Update Flight")
         print("10. Assign Pilot to Flight")
         print("11. Delete Flight")
+        print("12. View Flights with Pilots")
         print("0. Exit")
         choice = input("Enter your choice: ")
         
@@ -557,6 +584,8 @@ def main_menu():
             db.assign_pilot()
         elif choice == "11":
             db.delete_flight()
+        elif choice == "12":
+            db.flights_with_pilots()
         elif choice == "0":
             print("Closing...")
             break
