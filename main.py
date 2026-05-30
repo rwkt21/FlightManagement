@@ -341,26 +341,17 @@ class DBOperations:
     def search_flight(self):
         try:
             self.get_connection()
-            flight_number  = input("flight number: ").upper()
-            while True:
-                departure_date = input("Enter departure date (YYYY-MM-DD): ")
-                try:
-                    datetime.strptime(departure_date, "%Y-%m-%d")
-                    break
-                except ValueError:
-                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
-
-
-            self.cur.execute(self.sql_search_flight, (flight_number, departure_date))
+            flight_number = input("Enter flight number: ").upper()
+            self.cur.execute("SELECT * FROM FLIGHT WHERE flight_number = ?", (flight_number,))
             results = self.cur.fetchall()
             if results:
-                print("\nFlight Found")
-                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Upd Dep':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
-                print("-" * 90)
-                for row in results:
-                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
+                print(f"\nFlights found for {flight_number}:")
+                print(f"{'#':<5}{'Date':<14}{'Dep Time':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
+                print("-" * 70)
+                for i, row in enumerate(results, 1):
+                    print(f"{str(i):<5}{str(row[1]):<14}{str(row[2]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
             else:
-                print("No flight found with that number and date")
+                print(f"No flights found for {flight_number}")
         except Exception as e:
             print(e)
         finally:
@@ -394,16 +385,29 @@ class DBOperations:
     def update_flight(self):
         try:
             self.get_connection()
-            flight_number  = input("Enter flight number to update: ").upper()
+            flight_number = input("Enter flight number to update: ").upper()
+            self.cur.execute("SELECT * FROM FLIGHT WHERE flight_number = ?", (flight_number,))
+            results = self.cur.fetchall()
+            if not results:
+                print(f"No flights found for {flight_number}")
+                return
+            print(f"\nFlights found for {flight_number}:")
+            print(f"{'#':<5}{'Date':<14}{'Dep Time':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
+            print("-" * 70)
+            for i, row in enumerate(results, 1):
+                print(f"{str(i):<5}{str(row[1]):<14}{str(row[2]):<12}{str(row[4]):<12}{str(row[5]):<12}{str(row[6]):<10}{str(row[7])}")
             while True:
-                departure_date = input("Enter departure date (YYYY-MM-DD): ")
                 try:
-                    datetime.strptime(departure_date, "%Y-%m-%d")
-                    break
+                    choice = int(input("\nEnter the number of the flight to update: "))
+                    if 1 <= choice <= len(results):
+                        break
+                    else:
+                        print(f"Please enter a number between 1 and {len(results)}")
                 except ValueError:
-                    print("Invalid date. Please use YYYY-MM-DD e.g. 2025-06-01")
-
-
+                    print("Please enter a valid number")
+            selected = results[choice - 1]
+            departure_date = selected[1]
+            print(f"\nUpdating {flight_number} on {departure_date}")
             while True:
                 updated_departure_time = input("Enter updated departure time (HH:MM): ")
                 try:
