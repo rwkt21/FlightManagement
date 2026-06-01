@@ -565,7 +565,8 @@ class Flight:
 def main_menu():
     db = DBOperations()
     while True:
-        print("\n--- FLIGHT MANAGEMENT SYSTEM ---")
+        print("\n FLIGHT MANAGEMENT SYSTEM MENU")
+        print("\n--------------------------------")
         print("1. Add Pilot")
         print("2. Add a Destination")
         print("3. Add a Flight")
