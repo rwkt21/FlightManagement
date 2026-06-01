@@ -307,6 +307,7 @@ class DBOperations:
             rows = self.cur.fetchall()
             if rows:
                 print("\nList of All Pilots")
+                print("\n----------------------------------------------------------------")
                 print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
                 print("-" * 70)
                 for row in rows:
@@ -326,6 +327,7 @@ class DBOperations:
             rows = self.cur.fetchall()
             if rows:
                 print("\n List of All Destinations")
+                print("\n ----------------------------------------------------------------------------------")
                 print(f"{'Airport Code':<14}{'Airport Name':<40}{'City':<15}{'Country':<20}{'Timezone'}")
                 print("-" * 100)
                 for row in rows:
