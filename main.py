@@ -117,7 +117,7 @@ class DBOperations:
                                  JOIN PILOT p ON f.pilot_id = p.pilot_id
                                  ORDER BY f.departure_date"""
     
-    #  Function to show all flights and assigned pilots
+    #  function to show all flights and assigned pilots
     def flights_with_pilots(self):
         try:
             self.get_connection()
@@ -125,6 +125,7 @@ class DBOperations:
             results = self.cur.fetchall()
             if results:
                 print("\nFlights and Assigned Pilots")
+                print("\n-----------------------------------------------------------------------------")
                 print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Status':<12}{'First Name':<15}{'Last Name':<15}{'Rank'}")
                 print("-" * 90)
                 for row in results:
