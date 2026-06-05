@@ -88,6 +88,10 @@ class DBOperations:
 
     
     # SQL queries
+    sql_database_summary = """SELECT
+                                (SELECT COUNT(*) FROM PILOT) as total_pilots,
+                                (SELECT COUNT(*) FROM DESTINATION) as total_destinations,
+                                (SELECT COUNT(*) FROM FLIGHT) as total_flights"""
 
     sql_select_all_flights      = "SELECT * FROM FLIGHT"
     sql_select_all_pilots       = "SELECT * FROM PILOT"
@@ -518,6 +522,24 @@ class DBOperations:
             print(e)
         finally:
             self.conn.close()
+    # Data Summary
+    def database_summary(self):
+        try:
+            self.get_connection()
+            self.cur.execute(self.sql_database_summary)
+            row = self.cur.fetchone()
+            print("\n--- DATABASE SUMMARY ---")
+            print(f"{'Table':<20}{'Total Records'}")
+            print("-" * 35)
+            print(f"{'Pilots':<20}{row[0]}")
+            print(f"{'Destinations':<20}{row[1]}")
+            print(f"{'Flights':<20}{row[2]}")
+            print("-" * 35)
+            print(f"{'Total':<20}{row[0] + row[1] + row[2]}")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
 
 
 # The Classes
@@ -582,6 +604,7 @@ def main_menu():
         print("10. Assign Pilot to Flight")
         print("11. Delete Existing Flight")
         print("12. View Flights with Pilots")
+        print("13. Summary of Data")
         print("0. Exit")
         choice = input("Enter Number of your choice: ")
         
@@ -609,6 +632,8 @@ def main_menu():
             db.delete_flight()
         elif choice == "12":
             db.flights_with_pilots()
+        elif choice == "13":
+            db.database_summary()
         elif choice == "0":
             print("Closing...")
             break
