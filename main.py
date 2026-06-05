@@ -121,6 +121,14 @@ class DBOperations:
                                  JOIN PILOT p ON f.pilot_id = p.pilot_id
                                  ORDER BY f.departure_date"""
     
+    sql_flights_by_destination = """SELECT f.flight_number, f.departure_date,
+                                           f.departure_time, f.arrival_time,
+                                           f.status, p.first_name, p.last_name
+                                    FROM FLIGHT f
+                                    JOIN PILOT p ON f.pilot_id = p.pilot_id
+                                    WHERE f.airport_code = ?
+                                    ORDER BY f.departure_date"""
+    
     #  function to show all flights and assigned pilots
     def flights_with_pilots(self):
         try:
@@ -522,6 +530,38 @@ class DBOperations:
             print(e)
         finally:
             self.conn.close()
+
+    # flights by destination
+    def flights_by_destination(self):
+        try:
+            self.get_connection()
+            while True:
+                airport_code = input("Enter airport code (e.g. LHR): ").upper()
+                if len(airport_code) == 3 and airport_code.isalpha():
+                    break
+                else:
+                    print("Airport code must be exactly 3 letters e.g. LHR")
+            self.cur.execute("SELECT airport_name, city, country FROM DESTINATION WHERE airport_code = ?", (airport_code,))
+            destination = self.cur.fetchone()
+            if not destination:
+                print(f"No destination found with airport code {airport_code}")
+                return
+            print(f"\n--- FLIGHTS TO {destination[0]}, {destination[1]}, {destination[2]} ---")
+            self.cur.execute(self.sql_flights_by_destination, (airport_code,))
+            results = self.cur.fetchall()
+            if results:
+                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Arr Time':<12}{'Status':<12}{'Pilot'}")
+                print("-" * 80)
+                for row in results:
+                    pilot_name = f"{row[5]} {row[6]}"
+                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{pilot_name}")
+                print(f"\nTotal flights to {airport_code}: {len(results)}")
+            else:
+                print(f"No flights found to {airport_code}")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
     # Data Summary
     def database_summary(self):
         try:
@@ -605,6 +645,7 @@ def main_menu():
         print("11. Delete Existing Flight")
         print("12. View Flights with Pilots")
         print("13. Summary of Data")
+        print("14. View Flights by Destination")
         print("0. Exit")
         choice = input("Enter Number of your choice: ")
         
@@ -634,6 +675,8 @@ def main_menu():
             db.flights_with_pilots()
         elif choice == "13":
             db.database_summary()
+        elif choice == "14":
+            db.flights_by_destination()
         elif choice == "0":
             print("Closing...")
             break
