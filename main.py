@@ -552,7 +552,7 @@ class DBOperations:
             if not destination:
                 print(f"No destination found with airport code {airport_code}")
                 return
-            print(f"\n--- FLIGHTS TO {destination[0]}, {destination[1]}, {destination[2]} ---")
+            print(f"\n Flights to {destination[0]}, {destination[1]}, {destination[2]} ---")
             self.cur.execute(self.sql_flights_by_destination, (airport_code,))
             results = self.cur.fetchall()
             if results:
@@ -568,6 +568,27 @@ class DBOperations:
             print(e)
         finally:
             self.conn.close()
+    # Check for Unassigned Flights
+    def unassigned_flights(self):
+        try:
+            self.get_connection()
+            self.cur.execute(self.sql_unassigned_flights)
+            results = self.cur.fetchall()
+            if results:
+                print(f"\nUnassigned Flights ({len(results)} found)")
+                print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Arr Time':<12}{'Status':<12}{'Airport'}")
+                print("-" * 80)
+                for row in results:
+                    print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5])}")
+                print(f"\nAction required: {len(results)} flight(s) have no pilot assigned.")
+            else:
+                print("\nAll flights have a pilot assigned.")
+        except Exception as e:
+            print(e)
+        finally:
+            self.conn.close()
+
+
     # Data Summary
     def database_summary(self):
         try:
@@ -652,6 +673,7 @@ def main_menu():
         print("12. View Flights with Pilots")
         print("13. Summary of Data")
         print("14. View Flights by Destination")
+        print("15. View All Unassigned Flights")
         print("0. Exit")
         choice = input("Enter Number of your choice: ")
         
@@ -683,6 +705,8 @@ def main_menu():
             db.database_summary()
         elif choice == "14":
             db.flights_by_destination()
+        elif choice == "15":
+            db.unassigned_flights()
         elif choice == "0":
             print("Closing...")
             break
