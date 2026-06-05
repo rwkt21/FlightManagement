@@ -128,6 +128,12 @@ class DBOperations:
                                     JOIN PILOT p ON f.pilot_id = p.pilot_id
                                     WHERE f.airport_code = ?
                                     ORDER BY f.departure_date"""
+    sql_unassigned_flights = """SELECT flight_number, departure_date,
+                                       departure_time, arrival_time,
+                                       status, airport_code
+                                FROM FLIGHT
+                                WHERE pilot_id IS NULL
+                                ORDER BY departure_date"""
     
     #  function to show all flights and assigned pilots
     def flights_with_pilots(self):
