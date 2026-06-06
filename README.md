@@ -2,19 +2,19 @@
 
 A command-line application built with Python and SQLite to manage flights, pilots and destinations for an airline. Built for the Cloud and Databases module at the University of Bath.
 
----
+
 
 ## How to run
 
 Open in GitHub CodeSpaces and run:
 
-```
+
 python main.py
-```
+
 
 The database and sample data load automatically on first run.
 
----
+
 
 ## Files
 
@@ -54,3 +54,5 @@ The database and sample data load automatically on first run.
 ## Requirements
 
 Python 3 — no external libraries required.
+SQLite
+SQLite Viewer
