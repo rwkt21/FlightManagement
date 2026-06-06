@@ -47,9 +47,9 @@ class DBOps:
 
     # Insert SQL variables
     
-    sql_insert_pilot       = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
+    sql_insert_pilot = "INSERT INTO PILOT VALUES (?, ?, ?, ?, ?)"
     sql_insert_destination = "INSERT INTO DESTINATION VALUES (?, ?, ?, ?, ?)"
-    sql_insert_flight      = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
+    sql_insert_flight = "INSERT INTO FLIGHT VALUES (?, ?, ?, ?, ?, ?, ?, ?)"
 
     
     # Initalise and connection
@@ -94,8 +94,8 @@ class DBOps:
                                 (SELECT COUNT(*) FROM DESTINATION) as total_destinations,
                                 (SELECT COUNT(*) FROM FLIGHT) as total_flights"""
 
-    sql_select_all_flights      = "SELECT * FROM FLIGHT"
-    sql_select_all_pilots       = "SELECT * FROM PILOT"
+    sql_select_all_flights = "SELECT * FROM FLIGHT"
+    sql_select_all_pilots = "SELECT * FROM PILOT"
     sql_select_all_destinations = "SELECT * FROM DESTINATION"
 
     sql_search_flight = """SELECT * FROM FLIGHT
@@ -193,7 +193,7 @@ class DBOps:
                 pilot.licence_no,
                 pilot.rank))
             self.conn.commit()
-            print("Pilot added successfully")
+            print("pilot added successfully")
         except sqlite3.Error as err:
             print("Database error:", err)
 
@@ -215,9 +215,9 @@ class DBOps:
                     print("Airport code must be exactly 3 letters e.g. LHR")
             
             dest.airport_name = input("Enter airport name: ")
-            dest.city         = input("Enter city: ")
-            dest.country      = input("Enter country: ")
-            dest.timezone     = input("Enter timezone (e.g. UTC+0): ")
+            dest.city = input("Enter city: ")
+            dest.country = input("Enter country: ")
+            dest.timezone = input("Enter timezone (e.g. UTC+0): ")
             self.cur.execute(self.sql_insert_destination, (
                 dest.airport_code,
                 dest.airport_name,
@@ -314,7 +314,7 @@ class DBOps:
                 print("\nList of All Flights")
                 print("-" * 70)
                 for row in rows:
-                    print(f"{row[0]} | {row[1]} | {row[5]} | {row[7]}")
+                    print(f"{row[0]} | {row[1]} | {row[2]} | {row[5]} | {row[7]}")
         except Exception as e:
             print(e)
         finally:
@@ -327,7 +327,7 @@ class DBOps:
             rows = self.cur.fetchall()
             if rows:
                 print("\nList of All Pilots")
-                print("\n----------------------------------------------------------------")
+                print("\n ---------------------------------------------------------------")
                 print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
                 print("-" * 70)
                 for row in rows:
@@ -413,7 +413,7 @@ class DBOps:
             if not results:
                 print(f"No flights found for {flight_number}")
                 return
-            print(f"\nFlights found for {flight_number}:")
+            print(f"\n Flights found for {flight_number}:")
             print(f"{'#':<5}{'Date':<14}{'Dep Time':<12}{'Arr Time':<12}{'Status':<12}{'Pilot ID':<10}{'Airport'}")
             print("-" * 70)
             for i, row in enumerate(results, 1):
@@ -457,7 +457,7 @@ class DBOps:
                 departure_date))
             if self.cur.rowcount > 0:
                 self.conn.commit()
-                print("Flight schedule updated")
+                print("flight schedule updated")
             else:
                 print("No flight found with that number and date")
         except Exception as e:
@@ -503,7 +503,7 @@ class DBOps:
                 departure_date))
             if self.cur.rowcount > 0:
                 self.conn.commit()
-                print("Pilot assigned to flight")
+                print(f"Pilot {pilot_id} is now assigned to {flight_number}.")
             else:
                 print("No flight found with that number and date")
         except Exception as e:
@@ -528,7 +528,7 @@ class DBOps:
                 self.cur.execute(self.sql_delete_flight, (flight_number, departure_date))
                 if self.cur.rowcount > 0:
                     self.conn.commit()
-                    print("Flight removed")
+                    print("flight removed")
                 else:
                     print("No flight found with that number and date")
             else:
