@@ -6,15 +6,16 @@ from datetime import datetime
 # Manages flights, pilots and destinations for an airline company
 # This uses SQLite3 for database operations via a command-line interface
 
-#step 1 - creates the tables
-#step 2 - initialises the database connection
-#step 3 - adds sample data to the tables
-#step 4 - provides functions to add, update, delete and query the data
-#step 5 - adds the menu for user to execute functions
+#The general steps for the application:
+#step 1  creates the tables
+#step 2  initialises the database connection
+#step 3  adds sample data to the tables
+#step 4  provides functions to add, update, delete and query the data
+#step 5  adds the menu for user to execute functions
 
 
 
-class DBOperations:
+class DBOps:
 
     # skips table creation if tables exist
     sql_create_pilot_table = """CREATE TABLE IF NOT EXISTS PILOT (
@@ -71,7 +72,7 @@ class DBOperations:
                     sql = f.read()
                 self.cur.executescript(sql)
                 self.conn.commit()
-                print("Sample data loaded.")
+                print("sample data loaded.")
 
         except Exception as e:
             print(e)
@@ -156,7 +157,7 @@ class DBOperations:
             self.conn.close()
 
 
-    # Function to importing data from file   
+    # functions to insert data with validation
     def insert_pilot(self):
         try:
             self.get_connection()
@@ -655,7 +656,7 @@ class Flight:
 # -----------------
 
 def main_menu():
-    db = DBOperations()
+    db = DBOps()
     while True:
         print("\n FLIGHT MANAGEMENT SYSTEM MENU")
         print("\n--------------------------------")
