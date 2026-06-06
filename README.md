@@ -54,5 +54,7 @@ The database and sample data load automatically on first run.
 ## Requirements
 
 Python 3 — no external libraries required.
+
 SQLite
+
 SQLite Viewer
