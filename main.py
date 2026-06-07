@@ -78,6 +78,7 @@ class DBOps:
         except Exception as e:
             print(e)
 
+        #closes connection
         finally:
             try:
                 self.conn.close()
@@ -257,6 +258,7 @@ class DBOps:
                     break
                 except ValueError:
                     print("Invalid time. Please use HH:MM e.g. 09:30")
+            #updated departure times is for delays
             flight.updated_departure_time = None
             while True:
                 flight.arrival_time = input("Enter arrival time (HH:MM): ")
@@ -362,6 +364,7 @@ class DBOps:
             self.conn.close()
 
     # Searches Database
+    # search by flight number only and one flight can have multiple dates
     def search_flight(self):
         try:
             self.get_connection()
@@ -429,6 +432,7 @@ class DBOps:
                         print(f"Please enter a number between 1 and {len(results)}")
                 except ValueError:
                     print("Please enter a valid number")
+            #gets the dates of the selected flight
             selected = results[choice - 1]
             departure_date = selected[1]
             print(f"\nUpdating {flight_number} on {departure_date}")
@@ -551,6 +555,7 @@ class DBOps:
                 else:
                     print("Airport code must be exactly 3 letters e.g. LHR")
             self.cur.execute("SELECT airport_name, city, country FROM DESTINATION WHERE airport_code = ?", (airport_code,))
+            #checks that the destination exists
             destination = self.cur.fetchone()
             if not destination:
                 print(f"No destination found with airport code {airport_code}")
@@ -625,6 +630,7 @@ class Pilot:
 
    
 class Destination:
+    # airport_code is the primary key (IATA 3-letter code e.g. HKG)
     def __init__(self):
         self.airport_code = None
         self.airport_name = None
@@ -633,6 +639,7 @@ class Destination:
         self.timezone = None
 
 class Flight:
+    # composite primary key is flight_number + departure_date
     def __init__(self):
         self.flight_number = None
         self.departure_date = None
