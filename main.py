@@ -6,12 +6,13 @@ from datetime import datetime
 # Manages flights, pilots and destinations for an airline company
 # This uses SQLite3 for database operations via a command-line interface
 
-#The general steps for the application:
-#step 1  creates the tables
-#step 2  initialises the database connection
-#step 3  adds sample data to the tables
-#step 4  provides functions to add, update, delete and query the data
-#step 5  adds the menu for user to execute functions
+#Contents for the application:
+
+# initialises the database connection
+# creates the tables
+# loads sample data on first run
+# provides functions to add, update, delete and query data
+# runs the menu loop
 
 
 
@@ -84,6 +85,7 @@ class DBOps:
                 pass
 
     def get_connection(self):
+        # kept separate so __init__ and menu methods reuse the same db path
         self.conn = sqlite3.connect("FlightManagement.db")
         self.cur  = self.conn.cursor()
 
@@ -144,7 +146,7 @@ class DBOps:
             results = self.cur.fetchall()
             if results:
                 print("\nFlights and Assigned Pilots")
-                print("\n-----------------------------------------------------------------------------")
+                print("-" * 90)
                 print(f"{'Flight No':<12}{'Date':<14}{'Dep Time':<12}{'Status':<12}{'First Name':<15}{'Last Name':<15}{'Rank'}")
                 print("-" * 90)
                 for row in results:
@@ -225,7 +227,7 @@ class DBOps:
                 dest.country,
                 dest.timezone))
             self.conn.commit()
-            print("Destination saved successfully")
+            print("destination saved ")
         except Exception as e:
             print(e)
         finally:
@@ -327,7 +329,7 @@ class DBOps:
             rows = self.cur.fetchall()
             if rows:
                 print("\nList of All Pilots")
-                print("\n ---------------------------------------------------------------")
+                print("-" * 70)
                 print(f"{'Pilot ID':<12}{'First Name':<15}{'Last Name':<15}{'Licence No':<18}{'Rank'}")
                 print("-" * 70)
                 for row in rows:
@@ -347,7 +349,7 @@ class DBOps:
             rows = self.cur.fetchall()
             if rows:
                 print("\n List of All Destinations")
-                print("\n ----------------------------------------------------------------------------------")
+                print("-" * 100)
                 print(f"{'Airport Code':<14}{'Airport Name':<40}{'City':<15}{'Country':<20}{'Timezone'}")
                 print("-" * 100)
                 for row in rows:
@@ -581,7 +583,7 @@ class DBOps:
                 print("-" * 80)
                 for row in results:
                     print(f"{str(row[0]):<12}{str(row[1]):<14}{str(row[2]):<12}{str(row[3]):<12}{str(row[4]):<12}{str(row[5])}")
-                print(f"\nAction required: {len(results)} flight(s) have no pilot assigned.")
+                print(f"{len(results)} flight(s) need a pilot.")
             else:
                 print("\nAll flights have a pilot assigned.")
         except Exception as e:
@@ -611,9 +613,9 @@ class DBOps:
 
 
 # The Classes
-#--------------------------
 
 class Pilot:
+    # TODO: add validation here later
     def __init__(self):
         self.pilot_id = None
         self.first_name = None
@@ -621,10 +623,7 @@ class Pilot:
         self.licence_no = None
         self.rank = None
 
-    def __str__(self):
-        return f"Pilot ID: {self.pilot_id}, Name: {self.first_name} {self.last_name}, Licence: {self.licence_no}, Rank: {self.rank}"
-
-
+   
 class Destination:
     def __init__(self):
         self.airport_code = None
@@ -632,10 +631,6 @@ class Destination:
         self.city = None
         self.country = None
         self.timezone = None
-
-    def __str__(self):
-        return f"Airport: {self.airport_code} - {self.airport_name}, {self.city}, {self.country} ({self.timezone})"
-
 
 class Flight:
     def __init__(self):
@@ -648,12 +643,8 @@ class Flight:
         self.pilot_id= None
         self.airport_code = None
 
-    def __str__(self):
-        return f"Flight: {self.flight_number} on {self.departure_date}, Dep: {self.departure_time}, Arr: {self.arrival_time}, Status: {self.status}"
-
 
 # Main Menu
-# -----------------
 
 def main_menu():
     db = DBOps()
